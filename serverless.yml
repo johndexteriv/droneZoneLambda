@@ -1,0 +1,30 @@
+service: dexterTestLambda
+plugins:
+  - serverless-dotenv-plugin
+
+provider:
+  name: aws
+  # role: arn:aws:iam::980614374108:role/lambdaVPC
+  # logs:
+  #   restApi: {role: arn:aws:iam::980614374108:role/lambdaVPC}
+  runtime: nodejs12.x
+  memorySize: 512
+  timeout: 10
+  stage: dev
+  region: us-east-1
+  apiGateway: { shouldStartNameWithService: true }
+
+functions:
+  api:
+    handler: lambda.handler
+    vpc:
+      securityGroupIds:
+        - sg-bdbc6a8b
+      subnetIds:
+        - subnet-92c941cd
+        - subnet-d42ba7b2
+        - subnet-187af039
+    role: arn:aws:iam::616082320291:role/lambdaVPC
+    events:
+      - http: ANY /{proxy+}
+      - http: ANY /
